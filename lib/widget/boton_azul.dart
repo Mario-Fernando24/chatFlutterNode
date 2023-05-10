@@ -14,6 +14,6 @@ class BotonAzul extends StatelessWidget {
       style: ButtonStyle( minimumSize: MaterialStateProperty.all(Size(265, 46))),
       child: Text(text),
       onPressed:  onPressed
-);
+    );
   }
 }
