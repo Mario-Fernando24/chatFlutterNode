@@ -1,5 +1,6 @@
-import 'package:chatmongoflutter/models/usuarios.dart';
 import 'package:flutter/material.dart';
+import 'package:chatmongoflutter/models/usuarios.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsuarioPage extends StatefulWidget {
   
@@ -9,6 +10,8 @@ class UsuarioPage extends StatefulWidget {
 
 class _UsuarioPageState extends State<UsuarioPage> {
 
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   final usuario=[
     Usuario(uid: '1', nombre: 'Mario', email: "test1@gmail.com", online: true),
     Usuario(uid: '2', nombre: 'Xiomy', email: "test1@gmail.com", online: false),
@@ -16,14 +19,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
     Usuario(uid: '3', nombre: 'CAMILA', email: "test1@gmail.com", online: false),
     Usuario(uid: '4', nombre: 'LILIANA', email: "test1@gmail.com", online: true),
     Usuario(uid: '5', nombre: 'VICTORIA', email: "test1@gmail.com", online: false),
-    // Usuario(uid: '6', nombre: 'ARIADNA', email: "test1@gmail.com", online: false),
-    // Usuario(uid: '7', nombre: 'SADYSS', email: "test1@gmail.com", online: true),
-    // Usuario(uid: '8', nombre: 'BEBE', email: "test1@gmail.com", online: true),
-    // Usuario(uid: '9', nombre: 'p', email: "test1@gmail.com", online: true),
-    // Usuario(uid: '10', nombre: 'SADYS', email: "test1@gmail.com", online: true),
-    // Usuario(uid: '11', nombre: 'SADYS', email: "test1@gmail.com", online: true),
-    // Usuario(uid: '12', nombre: 'SADYS', email: "test1@gmail.com", online: true),
-
   ];
   @override
   Widget build(BuildContext context) {
@@ -44,25 +39,53 @@ class _UsuarioPageState extends State<UsuarioPage> {
             )
           ],
       ),
-      body: ListView.separated(
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _cargarUsuario,
+        header: WaterDropHeader(
+          complete: Icon(Icons.check, color: Colors.blue.shade400),
+          waterDropColor: Colors.blue.shade400
+        ),
+        child: _listViewUsuario(),
+        )
+    );
+  }
+
+   ListView _listViewUsuario(){
+
+    return ListView.separated(
         physics: BouncingScrollPhysics(),
-        itemBuilder: ( _ , i ) => ListTile(
-          title: Text(usuario[i].nombre ?? ""),
+        itemBuilder: ( _ , i ) => usuarioList(usuario[i]),
+        separatorBuilder: ( _ , i ) => Divider(),
+        itemCount: usuario.length,
+      );
+
+  }
+  
+
+  ListTile usuarioList(Usuario usuario) {
+
+    return ListTile(
+          title: Text(usuario.nombre ?? ""),
           leading: CircleAvatar(
-            child: Text(usuario[i].nombre!.substring(0,2)),
+            child: Text(usuario.nombre!.substring(0,2)),
+            backgroundColor: Colors.blue[100],
           ),
           trailing: Container(
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-              color: usuario[i].online==true ? Colors.green[300] : Colors.red[300],
+              color: usuario.online==true ? Colors.green[300] : Colors.red[300],
               borderRadius: BorderRadius.circular(100)
             ),
           ),
-        ),
-        separatorBuilder: ( _ , i ) => Divider(),
-        itemCount: usuario.length,
-      )
-    );
+        );
   }
+
+  void _cargarUsuario() async{
+    await Future.delayed(Duration(milliseconds: 1000));
+    _refreshController.refreshCompleted();
+  }
+
 }
