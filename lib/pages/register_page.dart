@@ -1,6 +1,9 @@
+import 'package:chatmongoflutter/helpers/show_alert.dart';
+import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:chatmongoflutter/widget/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../widget/boton_azul.dart';
 import '../widget/label.dart';
@@ -49,6 +52,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -79,10 +85,26 @@ class __FormState extends State<_Form> {
          
                     
           BotonAzul(
-            text: 'Ingresar',
-            onPressed: (){
-              print(emailCtrl.text);
-              print(passwordCtrl.text);
+            text: 'Registrar',
+            onPressed: authService.autenticando==true? null:() async{
+              //ocultar el teclado cuando presionamos en entrar
+              FocusScope.of(context).unfocus();
+      
+              final registerOk = await authService.register(nameCtrl.text.trim(),emailCtrl.text.trim(), passwordCtrl.text.trim());
+               if(registerOk==true){
+                  //conectar con nuestro token
+                  
+                  Navigator.pushReplacementNamed(context, 'usuario');
+              }else{
+                if(registerOk==null){
+                  // ignore: use_build_context_synchronously
+                  showAlert(context, 'Registro incorrecto','Revise alguno de los campos');
+
+                }else{
+                  // ignore: use_build_context_synchronously
+                  showAlert(context, 'Registro incorrecto',registerOk.toString());
+                }
+              }
             },
           )
         ],
