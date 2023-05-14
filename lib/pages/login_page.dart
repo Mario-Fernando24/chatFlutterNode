@@ -1,6 +1,8 @@
+import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:chatmongoflutter/widget/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../widget/boton_azul.dart';
 import '../widget/label.dart';
@@ -72,8 +74,10 @@ class __FormState extends State<_Form> {
           BotonAzul(
             text: 'Ingresar',
             onPressed: (){
-              print(emailCtrl.text);
-              print(passwordCtrl.text);
+              final authService = Provider.of<AuthService>(context, listen: false);
+
+              authService.login(emailCtrl.text, passwordCtrl.text);
+          
             },
           )
         ],
