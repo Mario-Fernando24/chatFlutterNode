@@ -1,3 +1,4 @@
+import 'package:chatmongoflutter/helpers/show_alert.dart';
 import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:chatmongoflutter/widget/custom_input.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,9 @@ class __FormState extends State<_Form> {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -73,11 +77,15 @@ class __FormState extends State<_Form> {
                     
           BotonAzul(
             text: 'Ingresar',
-            onPressed: (){
-              final authService = Provider.of<AuthService>(context, listen: false);
-
-              authService.login(emailCtrl.text, passwordCtrl.text);
-          
+            onPressed:  authService.autenticando==true? null:() async{
+              //ocultar el teclado cuando presionamos en entrar
+              FocusScope.of(context).unfocus();
+              final loginOk = await authService.login(emailCtrl.text.trim(), passwordCtrl.text.trim());
+              if(loginOk){
+                  //navegar otra pantalla
+              }else{
+                showAlert(context, 'Login incorrecto', 'Revise sus credenciales nuevamente');
+              }
             },
           )
         ],
