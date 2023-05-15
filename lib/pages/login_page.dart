@@ -85,7 +85,7 @@ class __FormState extends State<_Form> {
               final loginOk = await authService.login(emailCtrl.text.trim(), passwordCtrl.text.trim());
               if(loginOk){
                   //conectar con nuestro token
-                  socketService.conectarSocket();
+                  await socketService.conectarSocket();
                   Navigator.pushReplacementNamed(context, 'usuario');
               }else{
                 // ignore: use_build_context_synchronously

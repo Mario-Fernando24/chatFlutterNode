@@ -96,7 +96,7 @@ class __FormState extends State<_Form> {
               final registerOk = await authService.register(nameCtrl.text.trim(),emailCtrl.text.trim(), passwordCtrl.text.trim());
                if(registerOk==true){
                   //conectar con nuestro token
-                  socketService.conectarSocket();
+                 await socketService.conectarSocket();
                   Navigator.pushReplacementNamed(context, 'usuario');
               }else{
                 if(registerOk==null){

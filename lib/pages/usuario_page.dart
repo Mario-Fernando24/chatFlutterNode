@@ -37,6 +37,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
         title: Text(usuario?.nombre ?? '', style: TextStyle(color: Colors.black54),),
         elevation: 1,
         backgroundColor: Colors.white,
+        
         leading: IconButton(
           icon: Icon(Icons.exit_to_app,color: Colors.black54,),
           onPressed: () {
@@ -49,8 +50,9 @@ class _UsuarioPageState extends State<UsuarioPage> {
           actions: [
             Container(
               margin: EdgeInsets.only(right: 10),
-              // child: Icon(Icons.check_circle, color: Colors.blue[400],),
-               child: Icon(Icons.offline_bolt, color: Colors.red),
+               child: socketService.serverStatus==ServerStatus.Online ? 
+                  Icon(Icons.check_circle,color: Colors.blue[400],): 
+                  Icon(Icons.offline_bolt,color: Colors.red,)  
             )
           ],
       ),

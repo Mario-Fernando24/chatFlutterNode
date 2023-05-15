@@ -31,7 +31,7 @@ class LoadingPage extends StatelessWidget {
 
     if(autenticado==true){
         //conectar socket
-      socketService.conectarSocket();
+       await socketService.conectarSocket();
       Navigator.pushReplacementNamed(context, 'usuario');
      
 
