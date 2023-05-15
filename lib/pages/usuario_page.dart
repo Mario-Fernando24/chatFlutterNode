@@ -1,5 +1,7 @@
+import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:chatmongoflutter/models/usuarios.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsuarioPage extends StatefulWidget {
@@ -22,14 +24,22 @@ class _UsuarioPageState extends State<UsuarioPage> {
   ];
   @override
   Widget build(BuildContext context) {
+
+    final authServices = Provider.of<AuthService>(context);
+    final usuario = authServices.usuario;
+
     return  Scaffold(
       appBar: AppBar(
-        title: Text('Mi nombre', style: TextStyle(color: Colors.black54),),
+        title: Text(usuario?.nombre ?? '', style: TextStyle(color: Colors.black54),),
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.exit_to_app,color: Colors.black54,),
-          onPressed: () {},
+          onPressed: () {
+             // Desconectar el socket and salir de la app y eliminar el storage
+             Navigator.pushReplacementNamed(context, 'login');
+             AuthService.deleteToken();
+          },
           ),
           actions: [
             Container(
