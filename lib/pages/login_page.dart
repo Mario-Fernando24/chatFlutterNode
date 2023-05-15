@@ -1,5 +1,5 @@
 import 'package:chatmongoflutter/helpers/show_alert.dart';
-import 'package:chatmongoflutter/services/auth_services.dart';
+import 'package:chatmongoflutter/services/lib/service/lib/service/auth_services.dart';
 import 'package:chatmongoflutter/widget/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
