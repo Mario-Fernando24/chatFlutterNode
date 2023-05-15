@@ -1,5 +1,6 @@
 import 'package:chatmongoflutter/helpers/show_alert.dart';
 import 'package:chatmongoflutter/services/lib/service/lib/service/auth_services.dart';
+import 'package:chatmongoflutter/services/lib/service/lib/service/socket_service.dart';
 import 'package:chatmongoflutter/widget/custom_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -54,6 +55,8 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+        
 
     return Container(
       margin: EdgeInsets.only(top: 40),
@@ -93,7 +96,7 @@ class __FormState extends State<_Form> {
               final registerOk = await authService.register(nameCtrl.text.trim(),emailCtrl.text.trim(), passwordCtrl.text.trim());
                if(registerOk==true){
                   //conectar con nuestro token
-                  
+                  socketService.conectarSocket();
                   Navigator.pushReplacementNamed(context, 'usuario');
               }else{
                 if(registerOk==null){

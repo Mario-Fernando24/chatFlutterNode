@@ -1,5 +1,6 @@
 import 'package:chatmongoflutter/pages/usuario_page.dart';
 import 'package:chatmongoflutter/services/lib/service/lib/service/auth_services.dart';
+import 'package:chatmongoflutter/services/lib/service/lib/service/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,11 +25,13 @@ class LoadingPage extends StatelessWidget {
 
   Future checkLoginState(BuildContext context) async{
 
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final auth = Provider.of<AuthService>(context, listen: false);
     bool autenticado = await auth.isLoggedIn();
 
     if(autenticado==true){
         //conectar socket
+      socketService.conectarSocket();
       Navigator.pushReplacementNamed(context, 'usuario');
      
 

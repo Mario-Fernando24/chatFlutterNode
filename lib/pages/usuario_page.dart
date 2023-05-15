@@ -4,6 +4,8 @@ import 'package:chatmongoflutter/models/usuarios.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import '../services/lib/service/lib/service/socket_service.dart';
+
 class UsuarioPage extends StatefulWidget {
   
   @override
@@ -27,6 +29,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
     final authServices = Provider.of<AuthService>(context);
     final usuario = authServices.usuario;
+    final socketService = Provider.of<SocketService>(context);
+
 
     return  Scaffold(
       appBar: AppBar(
@@ -37,6 +41,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
           icon: Icon(Icons.exit_to_app,color: Colors.black54,),
           onPressed: () {
              // Desconectar el socket and salir de la app y eliminar el storage
+             socketService.disconnect();
              Navigator.pushReplacementNamed(context, 'login');
              AuthService.deleteToken();
           },
