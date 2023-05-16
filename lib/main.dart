@@ -1,8 +1,8 @@
+import 'package:chatmongoflutter/services/auth_services.dart';
+import 'package:chatmongoflutter/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:chatmongoflutter/routes/routes.dart';
-import 'package:chatmongoflutter/services/lib/service/lib/service/auth_services.dart';
-import 'package:chatmongoflutter/services/lib/service/lib/service/socket_service.dart';
 
 
 void main() => runApp(const MyApp());

@@ -1,10 +1,11 @@
-import 'package:chatmongoflutter/services/lib/service/lib/service/auth_services.dart';
+import 'package:chatmongoflutter/services/auth_services.dart';
+import 'package:chatmongoflutter/services/socket_service.dart';
+import 'package:chatmongoflutter/services/usuario_services.dart';
 import 'package:flutter/material.dart';
 import 'package:chatmongoflutter/models/usuarios.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../services/lib/service/lib/service/socket_service.dart';
 
 class UsuarioPage extends StatefulWidget {
   
@@ -15,15 +16,25 @@ class UsuarioPage extends StatefulWidget {
 class _UsuarioPageState extends State<UsuarioPage> {
 
   RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final usuarioService = new UsuarioServices();
 
-  final usuario=[
-    Usuario(uid: '1', nombre: 'Mario', email: "test1@gmail.com", online: true),
-    Usuario(uid: '2', nombre: 'Xiomy', email: "test1@gmail.com", online: false),
-    Usuario(uid: '3', nombre: 'DO', email: "test1@gmail.com", online: true),
-    Usuario(uid: '3', nombre: 'CAMILA', email: "test1@gmail.com", online: false),
-    Usuario(uid: '4', nombre: 'LILIANA', email: "test1@gmail.com", online: true),
-    Usuario(uid: '5', nombre: 'VICTORIA', email: "test1@gmail.com", online: false),
-  ];
+  List<Usuario> usuario = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _cargarUsuario();
+    super.initState();
+  }
+
+  // final usuario=[
+  //   Usuario(uid: '1', nombre: 'Mario', email: "test1@gmail.com", online: true),
+  //   Usuario(uid: '2', nombre: 'Xiomy', email: "test1@gmail.com", online: false),
+  //   Usuario(uid: '3', nombre: 'DO', email: "test1@gmail.com", online: true),
+  //   Usuario(uid: '3', nombre: 'CAMILA', email: "test1@gmail.com", online: false),
+  //   Usuario(uid: '4', nombre: 'LILIANA', email: "test1@gmail.com", online: true),
+  //   Usuario(uid: '5', nombre: 'VICTORIA', email: "test1@gmail.com", online: false),
+  // ];
   @override
   Widget build(BuildContext context) {
 
@@ -101,7 +112,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
   }
 
   void _cargarUsuario() async{
-    await Future.delayed(Duration(milliseconds: 1000));
+    
+
+   this.usuario = await usuarioService.getUsuario();
+   setState(() {});
+    // await Future.delayed(Duration(milliseconds: 1000));
     _refreshController.refreshCompleted();
   }
 
