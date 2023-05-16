@@ -1,4 +1,6 @@
+import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:chatmongoflutter/services/chat_services.dart';
+import 'package:chatmongoflutter/services/socket_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -19,12 +21,24 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
   final _focusNode = new FocusNode();
   bool _estadoEscribiendo = false; 
 
+  ChatService? chatServices;
+  SocketService? socketService;
+  AuthService? authService;
+
+
   List<ChatMessage> _message = [];
+
+  @override
+  void initState() {
+    super.initState();
+    this.chatServices = Provider.of<ChatService>(context, listen: false);
+    this.socketService = Provider.of<SocketService>(context, listen: false);
+    this.authService = Provider.of<AuthService>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    final chatServices = Provider.of<ChatService>(context, listen: false);
 
     return  Scaffold(
       appBar: AppBar(
@@ -32,12 +46,12 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
         title: Column(
             children: [
               CircleAvatar(
-                child: Text(chatServices.usuarioPara!.nombre.substring(0,2), style: TextStyle(fontSize: 12, color: Colors.white)),
+                child: Text(chatServices!.usuarioPara!.nombre.substring(0,2), style: TextStyle(fontSize: 12, color: Colors.white)),
                 backgroundColor: Colors.blue.shade400,
                 maxRadius: 14,
               ),
               SizedBox(height: 3),
-              Text(chatServices.usuarioPara!.nombre ?? '', style: TextStyle(color: Colors.black87, fontSize: 12))
+              Text(chatServices!.usuarioPara!.nombre ?? '', style: TextStyle(color: Colors.black87, fontSize: 12))
             ],
         ),
         centerTitle: true,
@@ -127,6 +141,12 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
      _message.insert(0, newMessage);
      newMessage.animationController.forward();
      setState(() { _estadoEscribiendo=false; });
+
+     this.socketService!.emit('mensaje-personal', {
+           'de': authService?.usuario?.uid,
+           'para': chatServices?.usuarioPara?.uid,
+           'mensaje': text
+     });
 
   }
 
