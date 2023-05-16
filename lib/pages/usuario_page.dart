@@ -1,4 +1,5 @@
 import 'package:chatmongoflutter/services/auth_services.dart';
+import 'package:chatmongoflutter/services/chat_services.dart';
 import 'package:chatmongoflutter/services/socket_service.dart';
 import 'package:chatmongoflutter/services/usuario_services.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
               borderRadius: BorderRadius.circular(100)
             ),
           ),
+          onTap: (){
+            final chatServices = Provider.of<ChatService>(context, listen: false);
+            chatServices.usuarioPara = usuario;
+             Navigator.pushNamed(context, 'chat');
+          },
         );
   }
 

@@ -1,7 +1,9 @@
+import 'package:chatmongoflutter/services/chat_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:chatmongoflutter/widget/chat_message.dart';
+import 'package:provider/provider.dart';
 
 
 class ChatPage extends StatefulWidget {
@@ -21,18 +23,21 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+
+    final chatServices = Provider.of<ChatService>(context, listen: false);
+
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Column(
             children: [
               CircleAvatar(
-                child: Text('Te', style: TextStyle(fontSize: 12, color: Colors.white)),
+                child: Text(chatServices.usuarioPara!.nombre.substring(0,2), style: TextStyle(fontSize: 12, color: Colors.white)),
                 backgroundColor: Colors.blue.shade400,
                 maxRadius: 14,
               ),
               SizedBox(height: 3),
-              Text('SAMACACA', style: TextStyle(color: Colors.black87, fontSize: 12))
+              Text(chatServices.usuarioPara!.nombre ?? '', style: TextStyle(color: Colors.black87, fontSize: 12))
             ],
         ),
         centerTitle: true,
