@@ -1,3 +1,4 @@
+import 'package:chatmongoflutter/models/mensajes_response.dart';
 import 'package:chatmongoflutter/services/auth_services.dart';
 import 'package:chatmongoflutter/services/chat_services.dart';
 import 'package:chatmongoflutter/services/socket_service.dart';
@@ -37,6 +38,22 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
 
     //escuchar un evento
     this.socketService!.socket.on('mensaje-personal', _escucharMensaje); 
+    //cargarHistorial
+    _cargarHistorial(this.chatServices!.usuarioPara!.uid);
+  }
+
+  void _cargarHistorial(String uidUsuario) async{
+       List<Mensaje> chat = await this.chatServices!.getChat(uidUsuario);
+
+       final history = chat.map((e) => new 
+                   ChatMessage(text: e.mensaje,
+                    uid: e.de,
+                    animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 0))..forward()
+                  ));
+
+                  setState(() {
+                     _message.insertAll(0, history);
+                  });
   }
 
   void _escucharMensaje(dynamic data){
@@ -152,7 +169,7 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
      
      _textController.clear();
      _focusNode.requestFocus();
-     final newMessage = new ChatMessage(text: text, uid: '123',animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 600)),);
+     final newMessage = new ChatMessage(text: text, uid: authService!.usuario!.uid,animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 600)),);
      _message.insert(0, newMessage);
      newMessage.animationController.forward();
      setState(() { _estadoEscribiendo=false; });
