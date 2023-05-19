@@ -71,7 +71,6 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
 
-
     return  Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -125,6 +124,7 @@ class _ChatPageState extends State<ChatPage>  with TickerProviderStateMixin{
               onSubmitted: obtenerTextCaja,
               onChanged: (String text){
                 setState(() {
+     
                    if(text.trim().length>0){
                     _estadoEscribiendo=true;     
                    }else{
